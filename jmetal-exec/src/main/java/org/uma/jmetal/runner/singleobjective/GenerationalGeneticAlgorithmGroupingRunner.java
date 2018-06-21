@@ -1,7 +1,7 @@
-package org.uma.jmetal.runner.multiobjective;
+package org.uma.jmetal.runner.singleobjective;
 
 import org.uma.jmetal.algorithm.Algorithm;
-import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAIIBuilder;
+import org.uma.jmetal.algorithm.singleobjective.geneticalgorithm.GeneticAlgorithmBuilder;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
@@ -9,70 +9,56 @@ import org.uma.jmetal.operator.impl.crossover.PMXCrossover;
 import org.uma.jmetal.operator.impl.mutation.PermutationSwapMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.PermutationProblem;
-import org.uma.jmetal.problem.multiobjective.MultiobjectiveTSP;
+import org.uma.jmetal.problem.singleobjective.SingleobjectiveGrouping;
+import org.uma.jmetal.problem.singleobjective.TSP;
 import org.uma.jmetal.solution.PermutationSolution;
-import org.uma.jmetal.util.AbstractAlgorithmRunner;
 import org.uma.jmetal.util.AlgorithmRunner;
-import org.uma.jmetal.util.JMetalException;
 import org.uma.jmetal.util.JMetalLogger;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
 import org.uma.jmetal.util.fileoutput.SolutionListOutput;
 import org.uma.jmetal.util.fileoutput.impl.DefaultFileOutputContext;
-import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class for configuring and running the NSGA-II algorithm to solve the bi-objective TSP
+ * Class to configure and run a generational genetic algorithm. The target problem is TSP.
  *
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  */
-
-public class NSGAIITSPRunner extends AbstractAlgorithmRunner {
+public class GenerationalGeneticAlgorithmGroupingRunner {
   /**
-   * @param args Command line arguments.
-   * @throws java.io.IOException
-   * @throws SecurityException
-   * @throws ClassNotFoundException
-   * Invoking command:
-  java org.uma.jmetal.runner.multiobjective.NSGAIITSPRunner problemName [referenceFront]
+   * Usage: java org.uma.jmetal.runner.singleobjective.BinaryGenerationalGeneticAlgorithmRunner
    */
-  public static void main(String[] args) throws JMetalException, IOException {
-    JMetalRandom.getInstance().setSeed(100L);
-
+  public static void main(String[] args) throws Exception {
     PermutationProblem<PermutationSolution<Integer>> problem;
-    Algorithm<List<PermutationSolution<Integer>>> algorithm;
+    Algorithm<PermutationSolution<Integer>> algorithm;
     CrossoverOperator<PermutationSolution<Integer>> crossover;
     MutationOperator<PermutationSolution<Integer>> mutation;
     SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selection;
 
-    problem = new MultiobjectiveTSP("/tspInstances/toyA.tsp", "/tspInstances/toyB.tsp");
+    problem = new SingleobjectiveGrouping("/tspInstances/kroA100.tsp");
 
     crossover = new PMXCrossover(0.9) ;
 
-    double mutationProbability = 0.2 ;
+    double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
     mutation = new PermutationSwapMutation<Integer>(mutationProbability) ;
 
-    selection = new BinaryTournamentSelection<>(new RankingAndCrowdingDistanceComparator<>());
-/**
- * List<Double> inters = new ArrayList<>();
- inters.add(0.0);
- inters.add(0.0);
- double epsilon =0.0001;
- algorithm = new RNSGAIIBuilder<>(problem, crossover, mutation,inters,epsilon)
+    selection = new BinaryTournamentSelection<PermutationSolution<Integer>>(new RankingAndCrowdingDistanceComparator<PermutationSolution<Integer>>());
 
- */
-    algorithm = new NSGAIIBuilder<PermutationSolution<Integer>>(problem, crossover, mutation)
+    algorithm = new GeneticAlgorithmBuilder<>(problem, crossover, mutation)
+            .setPopulationSize(100)
+            .setMaxEvaluations(250000)
             .setSelectionOperator(selection)
-            .setMaxEvaluations(10000)
-            .setPopulationSize(10)
             .build() ;
 
     AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
             .execute() ;
 
-    List<PermutationSolution<Integer>> population = algorithm.getResult() ;
+    PermutationSolution<Integer> solution = algorithm.getResult() ;
+    List<PermutationSolution<Integer>> population = new ArrayList<>(1) ;
+    population.add(solution) ;
+
     long computingTime = algorithmRunner.getComputingTime() ;
 
     new SolutionListOutput(population)
@@ -82,8 +68,8 @@ public class NSGAIITSPRunner extends AbstractAlgorithmRunner {
             .print();
 
     JMetalLogger.logger.info("Total execution time: " + computingTime + "ms");
-    JMetalLogger.logger.info("Random seed: " + JMetalRandom.getInstance().getSeed());
     JMetalLogger.logger.info("Objectives values have been written to file FUN.tsv");
     JMetalLogger.logger.info("Variables values have been written to file VAR.tsv");
+
   }
 }

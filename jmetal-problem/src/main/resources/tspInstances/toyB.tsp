@@ -1,0 +1,17 @@
+NAME: toyB
+TYPE: TSP
+COMMENT: 10-city problem B (Krolak/Felts/Nelson)
+DIMENSION: 10
+EDGE_WEIGHT_TYPE : EUC_2D
+NODE_COORD_SECTION
+1 1 1
+2 2 1
+3 3 1
+4 4 1
+5 5 1
+6 6 1
+7 7 1
+8 8 1
+9 9 1
+10 10 1
+EOF
