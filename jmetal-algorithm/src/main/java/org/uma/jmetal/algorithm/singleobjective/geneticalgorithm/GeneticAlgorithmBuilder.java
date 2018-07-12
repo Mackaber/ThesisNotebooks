@@ -17,7 +17,8 @@ import java.util.List;
  * Created by ajnebro on 10/12/14.
  */
 public class GeneticAlgorithmBuilder<S extends Solution<?>> {
-  public enum GeneticAlgorithmVariant {GENERATIONAL, STEADY_STATE}
+  public enum GeneticAlgorithmVariant {GENERATIONAL, STEADY_STATE, CONSTRAINED;
+  }
   /**
    * Builder class
    */
@@ -87,6 +88,9 @@ public class GeneticAlgorithmBuilder<S extends Solution<?>> {
     } else if (variant == GeneticAlgorithmVariant.STEADY_STATE) {
       return new SteadyStateGeneticAlgorithm<S>(problem, maxEvaluations, populationSize,
           crossoverOperator, mutationOperator, selectionOperator);
+    }else if (variant == GeneticAlgorithmVariant.CONSTRAINED) {
+      return new GenerationalConstrainedGeneticAlgorithm<S>(problem, maxEvaluations, populationSize,
+              crossoverOperator, mutationOperator, selectionOperator,evaluator);
     } else {
       throw new JMetalException("Unknown variant: " + variant) ;
     }

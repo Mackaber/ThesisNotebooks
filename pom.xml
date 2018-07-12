@@ -51,6 +51,7 @@
         <module>jmetal-algorithm</module>
         <module>jmetal-problem</module>
         <module>jmetal-exec</module>
+        <module>jmetal-utils</module>
     </modules>
 
     <properties>

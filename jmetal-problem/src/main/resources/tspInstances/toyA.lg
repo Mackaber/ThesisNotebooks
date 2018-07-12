@@ -3,24 +3,24 @@ TYPE: LG
 COMMENT: Level Grouping
 DIMENSION: 20
 NODE_COORD_SECTION
-1 0
-2 1
-3 1
-4 2
-5 0
-6 1
-7 3
-8 2
-9 3
-10 1
-11 0
-12 1
-13 1
-14 2
-15 0
-16 1
-17 3
-18 2
-19 3
-20 1
+1 0 Electronic
+2 1 Reading
+3 1 TV
+4 2 VideoGames
+5 0 Plays
+6 1 Action
+7 3 Racing
+8 2 Ballet
+9 3 TV
+10 1 Electronic
+11 0 Reading
+12 1 TV
+13 1 VideoGames
+14 2 Plays
+15 0 Action
+16 1 Racing
+17 3 Ballet
+18 2 Plays
+19 3 Action
+20 1 Racing
 EOF

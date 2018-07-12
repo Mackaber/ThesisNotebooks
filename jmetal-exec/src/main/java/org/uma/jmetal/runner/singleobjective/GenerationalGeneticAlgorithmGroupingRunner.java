@@ -37,7 +37,7 @@ public class GenerationalGeneticAlgorithmGroupingRunner {
     MutationOperator<PermutationSolution<Integer>> mutation;
     SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selection;
 
-    problem = new SingleobjectiveGrouping("/tspInstances/kroA100.tsp");
+    problem = new SingleobjectiveGrouping("/tspInstances/toyA.lg");
 
     crossover = new PMXCrossover(0.9) ;
 
