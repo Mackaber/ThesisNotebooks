@@ -1,16 +1,12 @@
-package org.uma.jmetal.problem.singleobjective;
+package SingleObjective;
 
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
-import org.uma.jmetal.problem.ConstrainedProblem;
 import org.uma.jmetal.problem.impl.AbstractIntegerPermutationProblem;
-import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.util.JMetalException;
-import org.uma.jmetal.util.solutionattribute.impl.NumberOfViolatedConstraints;
-import org.uma.jmetal.util.solutionattribute.impl.OverallConstraintViolation;
 
 import java.io.*;
 import java.util.Arrays;
@@ -21,23 +17,18 @@ import java.util.Arrays;
  * http://www.iwr.uni-heidelberg.de/groups/comopt/software/TSPLIB95/tsp/
  */
 @SuppressWarnings("serial")
-public class SingleobjectiveConstrainedGrouping extends AbstractIntegerPermutationProblem implements ConstrainedProblem<PermutationSolution<Integer>> {
-    public OverallConstraintViolation<PermutationSolution<Integer>> overallConstraintViolationDegree;
-    public NumberOfViolatedConstraints<PermutationSolution<Integer>> numberOfViolatedConstraints;
-
-
+public class SingleobjectiveGrouping extends AbstractIntegerPermutationProblem {
     private int numberOfUsers;
     private double[] levels;
 
     /**
      * Creates a new TSP problem instance
      */
-    public SingleobjectiveConstrainedGrouping(String levelFile) throws IOException {
+    public SingleobjectiveGrouping(String levelFile) throws IOException {
         levels = readProblem(levelFile);
 
         setNumberOfVariables(numberOfUsers);
         setNumberOfObjectives(1);
-        setNumberOfConstraints(1);
         setName("Single Objective Grouping");
     }
 
@@ -121,46 +112,28 @@ public class SingleobjectiveConstrainedGrouping extends AbstractIntegerPermutati
             level_values = new double[numberOfUsers];
 
             // Find the string SECTION
-            found = false;
+            found = false ;
             token.nextToken();
-            while (!found) {
+            while(!found) {
                 if ((token.sval != null) &&
                         ((token.sval.compareTo("SECTION") == 0)))
-                    found = true;
+                    found = true ;
                 else
-                    token.nextToken();
+                    token.nextToken() ;
             }
 
             for (int i = 0; i < numberOfUsers; i++) {
-                token.nextToken();
-                int j = (int) token.nval;
+                token.nextToken() ;
+                int j = (int)token.nval;
 
-                token.nextToken();
-                level_values[2 * (j - 1)] = token.nval;
+                token.nextToken() ;
+                level_values[2*(j-1)] = token.nval;
             }
 
         } catch (Exception e) {
             new JMetalException("SingleobjectiveGrouping.readProblem(): error when reading data file " + e);
         }
         return level_values;
-    }
-
-    @Override
-    public void evaluateConstraints(PermutationSolution<Integer> solution) {
-        // Between 0.4 and 0.6
-
-        double[] constraint = new double[getNumberOfConstraints()];
-
-//        splitGroups(solution.)
-
-//        constraint[0] =
-
-
-        double overallConstraintViolation = 0.0;
-        int violatedConstraints = 0;
-
-        overallConstraintViolationDegree.setAttribute(solution,overallConstraintViolation);
-        numberOfViolatedConstraints.setAttribute(solution,violatedConstraints);
     }
 
     @Override
