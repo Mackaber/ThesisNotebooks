@@ -1,6 +1,6 @@
-package Util;
+package me.mackaber.tesis.Util;
 
-import SingleObjective.GroupingSolution;
+import me.mackaber.tesis.SingleObjective.GroupingSolution;
 import org.uma.jmetal.problem.impl.AbstractGenericProblem;
 
 import java.util.List;

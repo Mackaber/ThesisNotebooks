@@ -1,4 +1,4 @@
-package SingleObjective;
+package me.mackaber.tesis.SingleObjective;
 
 import org.uma.jmetal.solution.Solution;
 

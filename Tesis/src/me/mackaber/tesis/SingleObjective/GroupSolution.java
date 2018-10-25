@@ -1,7 +1,7 @@
-package SingleObjective;
+package me.mackaber.tesis.SingleObjective;
 
-import Util.CombinationProblem;
-import Util.User;
+import me.mackaber.tesis.Util.CombinationProblem;
+import me.mackaber.tesis.Util.User;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.solution.impl.AbstractGenericSolution;
 
