@@ -70,5 +70,9 @@ public class User {
         return interestVector;
     }
 
+    @Override
+    public String toString() {
+        return String.format("{ %s, %s, %s, %s, }",id,level,interests,part_prc);
+    }
 
 }

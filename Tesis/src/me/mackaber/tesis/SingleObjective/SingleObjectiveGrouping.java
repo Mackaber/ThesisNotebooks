@@ -9,9 +9,6 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.math3.stat.descriptive.AbstractStorelessUnivariateStatistic;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
-import org.uma.jmetal.util.pseudorandom.BoundedRandomGenerator;
-import org.uma.jmetal.util.pseudorandom.RandomGenerator;
-import org.uma.jmetal.util.pseudorandom.impl.JavaRandomGenerator;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -22,20 +19,13 @@ public class SingleObjectiveGrouping extends CombinationProblem {
     private final String userFile;
     private Function function;
     private AbstractStorelessUnivariateStatistic ct_measure = new Mean();
-    private int n = 10001;
     private int min_size = 3;
     private int max_size = 6;
-    private List<User> users;
-    private List<User> pool;
     private int usersSize;
+    private List<User> users;
 
     public SingleObjectiveGrouping(String usersFile) {
         this.userFile = usersFile;
-    }
-
-    public SingleObjectiveGrouping setUserSize(int n) {
-        this.n = n;
-        return this;
     }
 
     public SingleObjectiveGrouping setGroupSizeRange(int min_size, int max_size) {
@@ -57,33 +47,9 @@ public class SingleObjectiveGrouping extends CombinationProblem {
 
     public void build() throws IOException {
         users = readProblem(userFile);
-        pool = users;
         setNumberOfVariables((int) Math.ceil(usersSize / min_size));
         setNumberOfObjectives(1);
         setName("SingleObjectiveGrouping");
-    }
-
-    //IDEA: Quizá sea buena idea sacar esto y hacerlo estatico para que lo use la mutación...
-    @Override
-    public List<User> generateRandomGroup() {
-        JavaRandomGenerator random = new JavaRandomGenerator();
-        int size = random.nextInt(min_size, max_size);
-        BoundedRandomGenerator<Integer> indexSelector = random::nextInt;
-        RandomGenerator<User> generator = RandomGenerator.forCollection(indexSelector, pool);
-
-        List<User> generatedUserGroup = new ArrayList<>();
-
-        if (pool.size() <= max_size) {
-            generatedUserGroup = pool;
-            pool.removeAll(pool); // So, it doesn't fill the remaining variables (altough, maybe it could be an interesting hack
-        } else { // Only if the pool still has users, otherwise it will return an empty list
-            for (int i = 0; i < size; i++) {
-                User userToAdd = generator.getRandomValue();
-                generatedUserGroup.add(userToAdd);
-                pool.remove(userToAdd);
-            }
-        }
-        return generatedUserGroup;
     }
 
     @Override
@@ -129,5 +95,20 @@ public class SingleObjectiveGrouping extends CombinationProblem {
         }
         usersSize = problem_users.size();
         return problem_users;
+    }
+
+    @Override
+    public List<User> getUsers() {
+        return users;
+    }
+
+    @Override
+    public int getMinSize() {
+        return min_size;
+    }
+
+    @Override
+    public int getMaxSize() {
+        return max_size;
     }
 }

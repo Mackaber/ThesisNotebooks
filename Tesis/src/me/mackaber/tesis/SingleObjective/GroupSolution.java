@@ -12,14 +12,6 @@ public class GroupSolution extends AbstractGenericSolution<List<User>, Combinati
 
     public GroupSolution(CombinationProblem problem) {
         super(problem);
-
-        for(int i = 0; i < getNumberOfVariables(); i++) { // Number of groups
-            // If the pool is exhausted (no more users to assign)
-            // the remaining variables will be filled with empty groups
-            List<User> group = problem.generateRandomGroup();
-            setVariableValue(i,group);
-        }
-
     }
 
     /** Copy Constructor */
@@ -47,4 +39,8 @@ public class GroupSolution extends AbstractGenericSolution<List<User>, Combinati
         return new GroupSolution(this);
     }
 
+    @Override
+    public List<HashMap<String, String>> getSampleSolution(int n) {
+        return null;
+    }
 }
